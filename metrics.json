@@ -90,5 +90,15 @@
   "scored_flagged_dollars": 2881749,
   "adj_r2_n": 1240,
   "adj_r2_k_modelA": 10,
-  "adj_r2_k_modelB": 14
+  "adj_r2_k_modelB": 14,
+  "rf_vs_gbm_tradeoff": {
+    "holdout_n": 1240,
+    "rf_median_ape": 28.9,
+    "rf_mean_ape": 94.9,
+    "rf_max_ape": 34469.5,
+    "gbm_median_ape": 31.7,
+    "gbm_mean_ape": 73.8,
+    "gbm_max_ape": 17816.5,
+    "rf_win_share_pct": 50.7
+  }
 }
