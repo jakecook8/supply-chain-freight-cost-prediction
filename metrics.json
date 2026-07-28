@@ -1,0 +1,94 @@
+{
+  "rows_raw": 10324,
+  "cols_raw": 33,
+  "freight_placeholder_top": {
+    "Freight Included in Commodity Cost": 1442,
+    "Invoiced Separately": 239,
+    "See DN-304 (ID#:10589)": 16
+  },
+  "rows_numeric_freight": 6198,
+  "rows_dropped_bundled": 4126,
+  "origin_unknown_pct": 12.8,
+  "modelA": {
+    "MLR": {
+      "r2": 0.332,
+      "rmse": 33516,
+      "medape": 63,
+      "mape": 136,
+      "adj_r2": 0.327
+    },
+    "Gamma GLM": {
+      "r2": 0.046,
+      "rmse": 467351,
+      "medape": 72,
+      "mape": 325,
+      "adj_r2": 0.038
+    },
+    "Random Forest": {
+      "r2": 0.694,
+      "rmse": 10148,
+      "medape": 33,
+      "mape": 92,
+      "adj_r2": 0.692
+    },
+    "Gradient Boosting": {
+      "r2": 0.72,
+      "rmse": 10700,
+      "medape": 34,
+      "mape": 77,
+      "adj_r2": 0.718
+    }
+  },
+  "modelB": {
+    "MLR": {
+      "r2": 0.336,
+      "rmse": 35598,
+      "medape": 61,
+      "mape": 135,
+      "adj_r2": 0.328
+    },
+    "Gamma GLM": {
+      "r2": 0.046,
+      "rmse": 456180,
+      "medape": 73,
+      "mape": 323,
+      "adj_r2": 0.035
+    },
+    "Random Forest": {
+      "r2": 0.722,
+      "rmse": 9644,
+      "medape": 29,
+      "mape": 95,
+      "adj_r2": 0.719
+    },
+    "Gradient Boosting": {
+      "r2": 0.753,
+      "rmse": 10329,
+      "medape": 32,
+      "mape": 74,
+      "adj_r2": 0.75
+    }
+  },
+  "gbm_cv_r2_mean": 0.749,
+  "gbm_cv_r2_std": 0.017,
+  "temporal": {
+    "train_n": 4981,
+    "test_n": 1217,
+    "r2": 0.629,
+    "medape": 40
+  },
+  "top_drivers": {
+    "weight (kilograms)": 0.638,
+    "mode_fuel_price": 0.071,
+    "line item quantity": 0.067,
+    "shipment mode": 0.047,
+    "distance_km": 0.046,
+    "dosage form": 0.038
+  },
+  "scored_rows": 1240,
+  "scored_flagged": 249,
+  "scored_flagged_dollars": 2881749,
+  "adj_r2_n": 1240,
+  "adj_r2_k_modelA": 10,
+  "adj_r2_k_modelB": 14
+}
