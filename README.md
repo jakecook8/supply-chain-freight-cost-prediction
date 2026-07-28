@@ -149,7 +149,7 @@ supply-chain-freight-cost-prediction/
 ## How to run
 
 ```bash
-git clone git@github.com:jakecook8/supply-chain-freight-cost-prediction.git
+git clone git@github.com:jacobtrcook/supply-chain-freight-cost-prediction.git
 cd supply-chain-freight-cost-prediction
 pip install -r requirements.txt   # pinned to the exact versions the notebook was run with
 jupyter notebook notebooks/freight_cost_model.ipynb
@@ -162,4 +162,4 @@ or open-license; see `data/SOURCE.md` for full citations and terms.
 
 ---
 
-**Jacob Cook** · [GitHub](https://github.com/jakecook8)
+**Jacob Cook** · [GitHub](https://github.com/jacobtrcook)
