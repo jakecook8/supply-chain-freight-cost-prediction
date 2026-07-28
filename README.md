@@ -111,3 +111,36 @@ random audit sample.
 
 ## Repo structure
 
+```
+supply-chain-freight-cost-prediction/
+├── README.md
+├── report/
+│   └── Freight_Cost_Prediction_Findings.pdf    # full write-up
+├── notebooks/
+│   └── freight_cost_model.ipynb                # cleaning, feature engineering, modeling
+├── data/
+│   ├── Suppy_Chain_Shipment_Data.csv            # raw USAID SCMS shipment records
+│   ├── countries_dspl_raw.csv                   # raw Google country centroids
+│   ├── EIA_JetFuel_SpotPrice_GulfCoast.csv       # raw EIA jet fuel spot price
+│   ├── EIA_Diesel_SpotPrice_GulfCoast_ULSD.csv   # raw EIA diesel spot price
+│   ├── usaid_scored_output.csv                  # derived: holdout shipments w/ predicted vs
+│   │                                            # actual freight, gap %, and worklist ranking
+│   ├── SOURCE.md                                # citations, licenses, usage notes
+│   └── LICENSE-google-dspl.txt                  # bundled per Google's redistribution terms
+├── requirements.txt
+└── LICENSE
+```
+
+## How to run
+
+```bash
+git clone git@github.com:jakecook8/supply-chain-freight-cost-prediction.git
+cd supply-chain-freight-cost-prediction
+pip install -r requirements.txt
+jupyter notebook notebooks/freight_cost_model.ipynb
+```
+
+## License & attribution
+
+Code in this repo is licensed under MIT (see `LICENSE`). All three underlying datasets are public
+or open-license; see `data/SOURCE.md` for full citations and terms.

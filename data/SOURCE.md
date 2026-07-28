@@ -5,7 +5,8 @@ license terms differ, so they're documented individually below.
 
 ## 1. USAID SCMS Delivery History
 
-- **File:** `Supply_Chain_Shipment_Pricing_Data.csv`
+- **File:** `Suppy_Chain_Shipment_Data.csv` (filename kept as-is from the original archive;
+  yes, "Suppy" is missing an "l" in the source file itself)
 - **Citation:** U.S. Agency for International Development. (n.d.). *Supply
   chain shipment pricing data* [Data set]. Kaggle.
   https://www.kaggle.com/datasets/princehobby/supply-chain-shipment-dataset
@@ -44,3 +45,13 @@ license terms differ, so they're documented individually below.
 - **Usage note:** matched to each shipment by mode — jet fuel price for air
   shipments, diesel for truck, jet fuel as a proxy for ocean (no direct
   bunker-fuel series was used).
+
+
+## Derived file: usaid_scored_output.csv
+
+Not a raw source — this is the notebook's own output. It's the random 20% holdout (1,240
+shipments) scored by the tuned gradient boosting model, with columns for actual vs. predicted
+freight, percent gap, dollar gap, and an anomaly flag. This is the file the "top 50
+over-expectation shipments" business result and worklist are built from (see the notebook's
+final sections). Included so the headline numbers in the README are checkable without re-running
+the full pipeline.
