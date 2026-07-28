@@ -83,7 +83,7 @@ the bundled Google license text.
 | Ridge (baseline) | + distance + fuel (enriched) | 0.354 | 0.347 | 0.071 | $8,096 | 58.1% |
 
 Adjusted R² (holdout n = 1,240; k = 10 operational-only predictors, 14 enriched) barely moves off
-raw R² -- with this much holdout data relative to predictor count, there's no meaningful
+raw R², since with this much holdout data relative to predictor count there's no meaningful
 overfitting penalty from predictor count alone. Worth noting: this correction is an OLS concept
 (it assumes each predictor spends one degree of freedom in a linear fit), so it's a standard,
 informal convention for the gradient boosting rows here, not a rigorous statistical correction the
@@ -101,6 +101,29 @@ strong, but the honest, decay-adjusted estimate of deployment performance versus
 prioritized worklist. The top 50 over-expectation shipments alone account for **$2,223,805** in
 freight above the model's expectation: a dollar-weighted target for contract review instead of a
 random audit sample.
+
+### Random Forest: the consistency/extremes tradeoff
+
+The broader model sweep in the notebook also fits a Random Forest on the same enriched feature
+set as gradient boosting. It's supplementary here, outside the primary gradient boosting vs.
+ridge comparison above, but the two tree models fail differently in a way that's worth acting on:
+
+| Model | R² (log) | Adj. R² | RMSE | Median APE | Mean APE |
+|---|---|---|---|---|---|
+| Random Forest | 0.722 | 0.719 | $9,644 | 29% | 95% |
+| Gradient Boosting | 0.753 | 0.750 | $10,329 | 32% | 74% |
+
+![Random Forest vs Gradient Boosting: error distribution and the consistency/extremes tradeoff](figures/fig9_rf_vs_gbm_tradeoff.png)
+
+Random Forest's median absolute percentage error, the typical shipment, is lower than gradient
+boosting's (29% vs. 32%): it's the more consistent model for the shipment you'd actually expect to
+see day to day. Gradient boosting pulls ahead once extremes enter the picture, with a lower mean
+absolute percentage error (74% vs. 95%) and a much lower worst-case error (17,817% vs. 34,470%),
+which is also why its overall R² comes out higher. Extreme shipments are worth calculating for,
+since a handful of very large freight costs can move a budget more than a long run of typical
+ones, so gradient boosting is the safer choice wherever that tail risk matters. But if the
+priority is consistency on a typical shipment, the case a day-to-day cost review or a
+renegotiation worklist most often touches, the tradeoff favors Random Forest.
 
 ## Limitations
 
@@ -137,7 +160,7 @@ supply-chain-freight-cost-prediction/
 │   │                                            # actual freight, gap %, and worklist ranking
 │   ├── SOURCE.md                                # citations, licenses, usage notes
 │   └── LICENSE-google-dspl.txt                  # bundled per Google's redistribution terms
-├── figures/                                    # 8 rendered charts (also embedded in the notebook)
+├── figures/                                    # 9 rendered charts (also embedded in the notebook)
 ├── metrics.json                                # every number this README and the paper cite
 ├── requirements.txt
 ├── .python-version
