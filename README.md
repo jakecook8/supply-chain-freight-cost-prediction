@@ -8,6 +8,8 @@ top 50 shipments the model flags as priced above expectation account for **$2.2M
 on donor-funded supply, a dollar-weighted worklist for contract review rather than a random
 sample.
 
+![Ranked over-expectation worklist: top 50 shipments by actual minus predicted freight](figures/fig8_worklist.png)
+
 ## Problem
 
 Health-commodity procurement programs need to forecast freight costs during planning, before a
@@ -73,12 +75,20 @@ the bundled Google license text.
 
 ## Results
 
-| Model | Feature set | R² (log) | R² (dollar) | MAE | Median APE |
-|---|---|---|---|---|---|
-| Gradient Boosting | Operational only | 0.734 | 0.545 | $5,117 | 35.6% |
-| Gradient Boosting | + distance + fuel (enriched) | **0.756** | **0.603** | **$4,673** | **31.4%** |
-| Ridge (baseline) | Operational only | 0.338 | 0.032 | $8,212 | 59.3% |
-| Ridge (baseline) | + distance + fuel (enriched) | 0.354 | 0.071 | $8,096 | 58.1% |
+| Model | Feature set | R² (log) | Adj. R² | R² (dollar) | MAE | Median APE |
+|---|---|---|---|---|---|---|
+| Gradient Boosting | Operational only | 0.734 | 0.732 | 0.545 | $5,117 | 35.6% |
+| Gradient Boosting | + distance + fuel (enriched) | **0.756** | **0.753** | **0.603** | **$4,673** | **31.4%** |
+| Ridge (baseline) | Operational only | 0.338 | 0.333 | 0.032 | $8,212 | 59.3% |
+| Ridge (baseline) | + distance + fuel (enriched) | 0.354 | 0.347 | 0.071 | $8,096 | 58.1% |
+
+Adjusted R² (holdout n = 1,240; k = 10 operational-only predictors, 14 enriched) barely moves off
+raw R² -- with this much holdout data relative to predictor count, there's no meaningful
+overfitting penalty from predictor count alone. Worth noting: this correction is an OLS concept
+(it assumes each predictor spends one degree of freedom in a linear fit), so it's a standard,
+informal convention for the gradient boosting rows here, not a rigorous statistical correction the
+way it is for ridge. The notebook computes this from first principles in its final section, along
+with the same figure for the two other model families it also fits (MLR, Gamma GLM).
 
 Enrichment (distance + fuel) improves both model families, but the larger gap is between model
 families — gradient boosting roughly doubles ridge's R² either way, confirming freight cost is
@@ -127,7 +137,12 @@ supply-chain-freight-cost-prediction/
 │   │                                            # actual freight, gap %, and worklist ranking
 │   ├── SOURCE.md                                # citations, licenses, usage notes
 │   └── LICENSE-google-dspl.txt                  # bundled per Google's redistribution terms
+├── figures/                                    # 8 rendered charts (also embedded in the notebook)
+├── metrics.json                                # every number this README and the paper cite
 ├── requirements.txt
+├── .python-version
+├── .gitignore
+├── .gitattributes
 └── LICENSE
 ```
 
@@ -136,7 +151,7 @@ supply-chain-freight-cost-prediction/
 ```bash
 git clone git@github.com:jakecook8/supply-chain-freight-cost-prediction.git
 cd supply-chain-freight-cost-prediction
-pip install -r requirements.txt
+pip install -r requirements.txt   # pinned to the exact versions the notebook was run with
 jupyter notebook notebooks/freight_cost_model.ipynb
 ```
 
@@ -144,3 +159,7 @@ jupyter notebook notebooks/freight_cost_model.ipynb
 
 Code in this repo is licensed under MIT (see `LICENSE`). All three underlying datasets are public
 or open-license; see `data/SOURCE.md` for full citations and terms.
+
+---
+
+**Jacob Cook** · [GitHub](https://github.com/jakecook8)
