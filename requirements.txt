@@ -1,0 +1,22 @@
+# Core data handling
+pandas
+numpy
+
+# Modeling
+scikit-learn
+
+# Stats (Welch's ANOVA, Breusch-Pagan test)
+scipy
+statsmodels
+
+# Plots
+matplotlib
+seaborn
+
+# Notebook runtime
+jupyter
+
+# Before publishing: run `pip freeze > requirements.txt` in the environment
+# that actually ran the notebook, and pin exact versions here for full
+# reproducibility (a grader/portfolio viewer re-running this cold shouldn't
+# hit a version-drift bug).
