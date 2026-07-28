@@ -1,0 +1,2 @@
+# Normalize CSV line endings so git stops flagging CRLF->LF conversion on every commit
+*.csv text eol=lf

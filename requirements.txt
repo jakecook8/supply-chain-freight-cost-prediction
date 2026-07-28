@@ -1,22 +1,10 @@
-# Core data handling
-pandas
-numpy
+# Pinned to the exact versions the notebook was run and validated with (from its own
+# printed version-statement cell) -- reproducing these gets you the same numbers,
+# including the adjusted R^2 figures. Python 3.13.5 (see .python-version).
+pandas==3.0.3
+numpy==2.4.6
+scikit-learn==1.9.0
+matplotlib==3.11.0
 
-# Modeling
-scikit-learn
-
-# Stats (Welch's ANOVA, Breusch-Pagan test)
-scipy
-statsmodels
-
-# Plots
-matplotlib
-seaborn
-
-# Notebook runtime
+# Notebook runtime -- version not critical to results
 jupyter
-
-# Before publishing: run `pip freeze > requirements.txt` in the environment
-# that actually ran the notebook, and pin exact versions here for full
-# reproducibility (a grader/portfolio viewer re-running this cold shouldn't
-# hit a version-drift bug).
