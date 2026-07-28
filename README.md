@@ -4,8 +4,8 @@ Gradient boosting model predicting per-shipment freight cost for international h
 deliveries (HIV/ARV, malaria diagnostics) shipped to 43 developing countries between 2006 and 2015.
 Tuned model reaches **R² = 0.756** on held-out shipments (log scale; 0.603 on the raw dollar
 scale), roughly double a ridge-regression baseline (R² = 0.354). Used as a screening tool, the
-top 50 shipments the model flags as priced above expectation account for **$2.2M** in freight —
-on donor-funded supply, a dollar-weighted worklist for contract review rather than a random
+top 50 shipments the model flags as priced above expectation account for **$2.2M** in freight.
+On donor-funded supply, that's a dollar-weighted worklist for contract review, not a random
 sample.
 
 ![Ranked over-expectation worklist: top 50 shipments by actual minus predicted freight](figures/fig8_worklist.png)
@@ -23,23 +23,23 @@ carries as much weight here as model selection.
 Three public sources, joined into one modeling table (full citations, license terms, and usage
 notes in `data/SOURCE.md`):
 
-1. **[USAID Supply Chain Shipment Pricing Data](https://www.kaggle.com/datasets/princehobby/supply-chain-shipment-dataset)**
-   — 10,324 health-commodity shipment records (HIV/ARV/malaria), 43 recipient countries,
-   2006–2015. Originally published by USAID's Bureau for Global Health; archived and used here
+1. **[USAID Supply Chain Shipment Pricing Data](https://www.kaggle.com/datasets/princehobby/supply-chain-shipment-dataset)**:
+   10,324 health-commodity shipment records (HIV/ARV/malaria), 43 recipient countries,
+   2006-2015. Originally published by USAID's Bureau for Global Health; archived and used here
    via its Kaggle mirror (also available at [data.gov](https://catalog.data.gov/dataset/supply-chain-shipment-pricing-data-fa4c8)).
    U.S. federal data, public domain.
-2. **[Google country centroids](https://developers.google.com/public-data/docs/canonical/countries_csv)**
-   — origin/destination lat-lon centroids, used to compute the `distance_km` haversine feature.
+2. **[Google country centroids](https://developers.google.com/public-data/docs/canonical/countries_csv)**:
+   origin/destination lat-lon centroids, used to compute the `distance_km` haversine feature.
    Two shipment destinations (South Sudan, Congo-DRC) are missing from Google's file and were
    added manually. BSD-style license, redistribution permitted with attribution retained.
-3. **EIA Gulf Coast spot fuel prices** — monthly jet-fuel and ultra-low-sulfur diesel spot prices,
+3. **EIA Gulf Coast spot fuel prices**: monthly jet-fuel and ultra-low-sulfur diesel spot prices,
    matched to each shipment by mode (jet fuel for air, diesel for truck, jet fuel as an ocean
    proxy), used as the `mode_fuel_price` macro cost covariate. Published by the U.S. Energy
    Information Administration. U.S. federal data, public domain.
    [Jet fuel](https://www.eia.gov/dnav/pet/hist/eer_epjk_pf4_rgc_dpgD.htm) ·
    [Diesel (ULSD)](https://www.eia.gov/dnav/pet/hist/eer_epd2dxl0_pf4_rgc_dpgD.htm)
 
-All raw files are included in `data/` — see `data/SOURCE.md` for exact filenames, citations, and
+All raw files are included in `data/`; see `data/SOURCE.md` for exact filenames, citations, and
 the bundled Google license text.
 
 ## Approach
@@ -48,11 +48,11 @@ the bundled Google license text.
   brings it close to symmetric (skew -0.35), so the model is fit and primarily scored on the log
   scale, with dollar-scale metrics reported alongside for transparency.
 - **Feature engineering**:
-  - `distance_km` — parsed origin country from the free-text manufacturing site field (87.2%
+  - `distance_km`: parsed origin country from the free-text manufacturing site field (87.2%
     resolved), looked up origin/destination centroids, computed great-circle distance via the
     haversine formula. Single highest-value engineered feature; the raw data has no geography
     signal at all.
-  - `mode_fuel_price` — monthly EIA spot price matched to each shipment's actual mode (jet fuel
+  - `mode_fuel_price`: monthly EIA spot price matched to each shipment's actual mode (jet fuel
     for air, diesel for truck, jet fuel as an ocean proxy), joined on shipment year-month.
 - **Leakage avoidance**: pack price, unit price, and line-item value are algebraically linked
   (pack price = unit price × units-per-pack, ratio 1.000 confirmed) and were excluded as a cluster
@@ -65,13 +65,13 @@ the bundled Google license text.
   and fuel values natively; ridge trades that accuracy for coefficient-level interpretability.
 - **Statistical test**: Levene's test showed unequal variance across shipment modes (W = 96.6,
   p = 4.7e-61), so mode-level cost differences were tested with Welch's ANOVA rather than a
-  classical F-test — result: F(3, 944) = 246.5, p < 0.001, freight cost differs significantly by
+  classical F-test: F(3, 944) = 246.5, p < 0.001, so freight cost differs significantly by
   mode (air and air-charter concentrate cost).
 - **Validation**: 20% random holdout, confirmed by 5-fold CV (R² = 0.743) and by a temporal
   holdout (train through 2013, test 2014+) to get an honest deployment-realistic estimate.
 - **Diagnostics**: permutation importance (shipment weight is the dominant driver, 0.78 share) and
   a Breusch-Pagan test on residuals, which rejects constant error variance (LM = 17.6,
-  p = 2.7e-05) — error is proportionally larger for low-cost shipments.
+  p = 2.7e-05), so error is proportionally larger for low-cost shipments.
 
 ## Results
 
@@ -91,15 +91,15 @@ way it is for ridge. The notebook computes this from first principles in its fin
 with the same figure for the two other model families it also fits (MLR, Gamma GLM).
 
 Enrichment (distance + fuel) improves both model families, but the larger gap is between model
-families — gradient boosting roughly doubles ridge's R² either way, confirming freight cost is
+families: gradient boosting roughly doubles ridge's R² either way, confirming freight cost is
 driven by nonlinear interactions a linear model can't capture. On a time-ordered holdout (train
-through 2013, test 2014 onward) the enriched gradient boosting model's R² drops to 0.650 — still
+through 2013, test 2014 onward) the enriched gradient boosting model's R² drops to 0.650, still
 strong, but the honest, decay-adjusted estimate of deployment performance versus the random-split
 0.756.
 
 **Business result**: scoring every shipment and ranking by (actual − predicted) freight surfaces a
 prioritized worklist. The top 50 over-expectation shipments alone account for **$2,223,805** in
-freight above the model's expectation — a dollar-weighted target for contract review instead of a
+freight above the model's expectation: a dollar-weighted target for contract review instead of a
 random audit sample.
 
 ## Limitations
@@ -115,8 +115,8 @@ random audit sample.
   Commodity Cost," "Invoiced Separately") rather than a line-item dollar figure, and were dropped.
   The model doesn't represent shipments whose freight is bundled into commodity cost.
 - **Tree models can't extrapolate**: gradient boosting predicts by averaging outcomes within
-  learned feature regions, so a shipment heavier or farther than anything in the 2006–2015
-  training data gets systematically under-predicted — a structural limit of the method, not just
+  learned feature regions, so a shipment heavier or farther than anything in the 2006-2015
+  training data gets systematically under-predicted, a structural limit of the method, not just
   this dataset.
 
 ## Repo structure
